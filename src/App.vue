@@ -1,20 +1,26 @@
 <template>
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <day-card :date="today"></day-card>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import DayCard from './components/DayCard.vue'
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    DayCard
+  },
+  data() {
+    return {
+      today: new Date()
+    };
   }
 }
 </script>
 
-<style>
-#app {
-  
-}
+<style lang="scss">
+  @import "~@/assets/_global.scss";
+  @import "~@/assets/_reset.scss";
+
+
 </style>
