@@ -1,5 +1,5 @@
 <template>
-  <div :class="`todo-card ${bgClass}`">
+  <div :class="`schedule-card todo-card ${bgClass}`">
     <span>{{ text }}</span>
   </div>
 </template>

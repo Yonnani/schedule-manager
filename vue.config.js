@@ -9,7 +9,8 @@ module.exports = {
     loaderOptions: {
       scss: {
         additionalData: `
-          @import "~@/assets/_test.scss";
+          @import "~@/assets/_global.scss";
+          @import "~@/assets/_reset.scss";
         `
       }
     }

@@ -1,13 +1,13 @@
 <template>
   <div class="date-area">
-    <arrow arrow-value="←"></arrow>
+    <arrow :arrow-value="require(`@/assets/icons/left-arrow.svg`)"></arrow>
     <div class="date-text">
       <div class="year-text">{{ date.getFullYear() }}</div>
       <div class="month-day-text">
         {{ `${date.getMonth() + 1}월 ${date.getDate()}일 (${getShortDayFromDate(date)})` }}
       </div>
     </div>
-    <arrow arrow-value="→"></arrow>
+    <arrow :arrow-value="require(`@/assets/icons/right-arrow.svg`)"></arrow>
   </div>
 </template>
 

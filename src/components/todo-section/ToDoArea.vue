@@ -1,5 +1,5 @@
 <template>
-  <div class="todo">
+  <div class="content todo">
     <div class="title">할 일 (0)</div>
     <plus-button-card></plus-button-card>
     <input-card :value="'lorem ipsum lorem ip'"></input-card>
@@ -38,31 +38,7 @@ export default {
 
 <style lang="scss" scoped>
   .todo {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-
-    .title {
-      font-size: 17px;
-      width: 100%;
-      
-    }
-
     .todo-card {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      width: 327px;
-      height: 68px;
-      border-radius: 12px;
-      font-size: 17px;
-      color: #FFFFFF;
-
-      margin: {
-        top: 10px;
-        bottom: 10px;
-      }
-
       &.default {
         background-color: #5AAAFA;
       }

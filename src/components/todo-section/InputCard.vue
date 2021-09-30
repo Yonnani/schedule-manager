@@ -1,5 +1,5 @@
 <template>
-  <div class="todo-card active">
+  <div class="schedule-card todo-card active">
     <input type="text" :value="value">
   </div>
 </template>
@@ -17,10 +17,12 @@ export default {
   .todo-card {
     input {
       text-align: center;
-      border-radius: inherit;
       font-size: inherit;
       background-color: inherit;
       color: inherit;
+      border-radius: 0;
+      border: 0;
+      outline-style: none;
     }
   }
 </style>

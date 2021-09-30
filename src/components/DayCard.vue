@@ -30,12 +30,49 @@ export default {
     flex-direction: column;
     align-items: stretch;
     align-content: center;
-    min-height: 100%;
+    // min-height: 100%;
     max-width: 375px;
     padding: 20px;
     margin: {
       left: auto;
       right: auto;
     };
+
+    .content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 327px;
+      margin: {
+        left: auto;
+        right: auto;
+        top: 20px;
+      };
+
+      .title {
+        font-size: 17px;
+        width: 100%;
+        margin: {
+          top: 10px;
+          bottom: 10px;
+        };
+      }
+
+      .schedule-card {
+        width: inherit;
+        height: 68px;
+        border-radius: 12px;
+        font-size: 17px;
+        color: #FFFFFF;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: {
+          top: 5px;
+          bottom: 5px;
+        };
+      }
+    }
+
   }
 </style>

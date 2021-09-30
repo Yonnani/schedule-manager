@@ -1,5 +1,8 @@
 <template>
   <day-card :date="today"></day-card>
+  <footer>
+    <div>Arrow Icons made by <a href="https://www.flaticon.com/authors/roundicons" title="Roundicons">Roundicons</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
+  </footer>
 </template>
 
 <script>
@@ -19,8 +22,12 @@ export default {
 </script>
 
 <style lang="scss">
-  @import "~@/assets/_global.scss";
-  @import "~@/assets/_reset.scss";
-
-
+  footer {
+    color: #000;
+    font-size: 12px;
+    text-align: center;
+    position: absolute;
+    bottom: 0;
+    right: 0
+  }
 </style>

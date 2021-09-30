@@ -1,6 +1,8 @@
 <template>
   <div class="arrow">
-    <button>{{ arrowValue }}</button>
+    <button>
+      <img :src="arrowValue" alt="">
+    </button>
   </div>
 </template>
 
@@ -16,7 +18,13 @@ export default {
 <style lang="scss">
   .arrow {
     button {
-      font-size: 20px;
+      background-color: inherit;
+      border: 0;
+      cursor: pointer;
+      img {
+        width: 20px;
+        height: 20px;
+      }
     }
   }
 </style>

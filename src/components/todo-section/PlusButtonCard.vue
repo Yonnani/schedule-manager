@@ -1,5 +1,5 @@
 <template>
-  <div class="todo-card">
+  <div class="schedule-card todo-card">
     <button class="plus-button">+</button>
   </div>
 </template>
