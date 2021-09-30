@@ -1,7 +1,7 @@
 <template>
   <div class="arrow">
     <button>
-      <img :src="arrowValue" alt="">
+      <img :src="arrowValue" alt="" :width="width" :height="height">
     </button>
   </div>
 </template>
@@ -10,21 +10,21 @@
 export default {
   name: 'Arrow',
   props: [
-    'arrowValue'
+    'arrowValue',
+    'width',
+    'height'
   ]
 }
 </script>
 
 <style lang="scss">
   .arrow {
+    display: flex;
+
     button {
       background-color: inherit;
       border: 0;
       cursor: pointer;
-      img {
-        width: 20px;
-        height: 20px;
-      }
     }
   }
 </style>

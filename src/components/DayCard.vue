@@ -1,6 +1,7 @@
 <template>
   <div class="card">
-    <date-area :date="date"></date-area>
+    <date-area 
+      :date="date"></date-area>
     <to-do-area></to-do-area>
     <done-area></done-area>
   </div>
@@ -20,6 +21,10 @@ export default {
     DateArea,
     ToDoArea,
     DoneArea
+  },
+  data() {
+    return {
+    };
   }
 }
 </script>
@@ -30,7 +35,7 @@ export default {
     flex-direction: column;
     align-items: stretch;
     align-content: center;
-    // min-height: 100%;
+    min-height: 100%;
     max-width: 375px;
     padding: 20px;
     margin: {

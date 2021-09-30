@@ -1,43 +1,77 @@
 <template>
   <div class="date-area">
-    <arrow :arrow-value="require(`@/assets/icons/left-arrow.svg`)"></arrow>
+    <left-arrow
+      v-if="cardNum === 1"
+      :width="arrowSize" :height="arrowSize"
+      @click.capture="goPrevDay()"></left-arrow>
+
     <div class="date-text">
-      <div class="year-text">{{ date.getFullYear() }}</div>
+      <div class="year-text">{{ thisDate.getFullYear() }}</div>
       <div class="month-day-text">
-        {{ `${date.getMonth() + 1}월 ${date.getDate()}일 (${getShortDayFromDate(date)})` }}
+        {{ `${thisDate.getMonth() + 1}월 ${thisDate.getDate()}일 (${getShortDayFromDate(thisDate)})` }}
       </div>
     </div>
-    <arrow :arrow-value="require(`@/assets/icons/right-arrow.svg`)"></arrow>
+    
+    <right-arrow 
+      v-if="cardNum === 1"
+      :width="arrowSize" :height="arrowSize"
+      @click.capture="goNextDay()"></right-arrow>
   </div>
 </template>
 
 <script>
-import Arrow from './Arrow.vue';
+import LeftArrow from '../LeftArrow.vue';
+import RightArrow from '../RightArrow.vue';
+import { mapActions, mapState } from 'vuex';
 
 export default {
-  components: { Arrow },
+  components: { 
+    LeftArrow,
+    RightArrow
+  },
   name: 'DateArea',
   props: [
     'date'
   ],
+  data() {
+    return {
+      arrowSize: 20
+    };
+  },
+  computed: {
+    thisDate() {
+      return new Date(this.date);
+    },
+    ...mapState([
+      'cardNum'
+    ])
+  },
   methods: {
     getShortDayFromDate(_date) {
       const options = { weekday: 'short' };
       return new Intl.DateTimeFormat('ko-KR', options).format(_date);
-    }
+    },
+    ...mapActions([
+      'goPrevDay',
+      'goNextDay'
+    ])
   }
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
   .date-area {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
     height: 60px;
 
     .date-text {
       text-align: center;
+      margin: {
+        left: auto;
+        right: auto;
+      };
 
       .year-text {
         font-size: 15px;
