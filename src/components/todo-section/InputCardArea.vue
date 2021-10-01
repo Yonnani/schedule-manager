@@ -25,11 +25,14 @@ export default {
     ActionButton
   },
   props: [
-    'mode',
-    'id'
+    'mode', // modify, create
+    'content'
   ],
   mounted() {
     this.$refs.input.focus();
+    if (this.mode === 'modify' && this.content) {
+      this.$refs.input.setValue(this.content);
+    }
   },
   methods: {
     cancel() {
@@ -39,7 +42,6 @@ export default {
       const inputValue = this.$refs.input.getValue();
       this.$emit('completeInput', {
         mode: this.mode,
-        id: this.id,
         content: inputValue
       });
     }
@@ -51,7 +53,7 @@ export default {
   .input-card-area {
     width: inherit;
     height: inherit;
-    
+
     .buttons {
       display: flex;
       justify-content: space-around;

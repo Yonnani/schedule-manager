@@ -78,6 +78,15 @@ export default createStore({
 
       dispatch('refreshSchedules');
     },
+    updateTodo({ state, dispatch }, { dateKey, id, content }) {
+      let schedule = {...state.schedules[dateKey]};
+      const idx = schedule.todoList.findIndex(todo => todo.id === id);
+      schedule.todoList[idx].content = content;
+
+      storage.setData(dateKey, schedule);
+
+      dispatch('refreshSchedules');
+    },
     completeTodo({ state, dispatch }, { dateKey, id }) {
       console.log('complete todo');
       let schedule = {...state.schedules[dateKey]};

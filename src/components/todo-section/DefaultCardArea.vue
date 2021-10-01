@@ -1,9 +1,9 @@
 <template>
-  <div class="default-card-area">
+  <div v-if="mode !== 'modify'" class="default-card-area">
     <default-card 
       :todo="todo"
       :mode="mode"
-      @click="changeMode()"></default-card>
+      @click="changeMode('tapped')"></default-card>
     <div v-if="mode === 'tapped'" class="buttons">
       <action-button text="삭제"
         @click="deleteTodo"></action-button>
@@ -13,37 +13,50 @@
         @click="completeTodo"></action-button>
     </div>
   </div>
+  <template v-else>
+    <input-card-area
+      mode="modify"
+      :content="todo.content"
+      @cancel-input="cancelInput"
+      @complete-input="updateTodo"></input-card-area>
+  </template>
 </template>
 
 <script>
 import ActionButton from './ActionButton.vue'
 import DefaultCard from './DefaultCard.vue'
+import InputCardArea from './InputCardArea.vue'
 import { mapActions } from 'vuex';
 
 export default {
   name: 'DefaultCardArea',
-  components: { DefaultCard, ActionButton },
+  components: { 
+    DefaultCard, 
+    ActionButton, 
+    InputCardArea 
+  },
   props: [
     'todo',
     'date'
   ],
   data() {
     return {
-      mode: 'default'
+      mode: 'default' // default, tapped, modify
     };
   },
   methods: {
-    changeMode() {
-      this.mode = (this.mode === 'tapped' ? 'default' : 'tapped');
+    changeMode(_mode) {
+      this.mode = _mode;
     },
     deleteTodo() {
       this.deleteTodoSchedule({
         dateKey: this.date,
         id: this.todo.id
       });
+      this.mode = 'default';
     },
     modifyTodo() {
-      console.log('modify todo');
+      this.changeMode('modify');
     },
     completeTodo() {
       this.completeTodoSchedule({
@@ -52,9 +65,21 @@ export default {
       });
       this.mode = 'default';
     },
+    cancelInput() {
+      this.mode = 'default';
+    },
+    updateTodo({ content }) {
+      this.updateTodoSchedule({
+        dateKey: this.date, 
+        id: this.todo.id, 
+        content: content
+      });
+      this.mode = 'default';
+    },
     ...mapActions({
       deleteTodoSchedule: 'deleteTodo',
-      completeTodoSchedule: 'completeTodo'
+      completeTodoSchedule: 'completeTodo',
+      updateTodoSchedule: 'updateTodo'
     })
   }
 }

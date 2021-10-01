@@ -18,6 +18,9 @@ export default {
     },
     getValue() {
       return this.inputValue;
+    },
+    setValue(_value) {
+      this.inputValue = _value;
     }
   }
 }
