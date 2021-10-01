@@ -1,6 +1,6 @@
 <template>
   <div class="schedule-card done-card">
-    {{ text }}
+    {{ content }}
   </div>
 </template>
 
@@ -8,7 +8,7 @@
 export default {
   name: 'DoneCard',
   props: [
-    'text'
+    'content'
   ]
 }
 </script>

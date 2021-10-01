@@ -46,7 +46,6 @@ export default createStore({
       commit('setSchedules', newSchedules);
     },
     addTodoSchedule({ state, dispatch }, { dateKey, todoContent }) {
-      
       let schedule = {...state.schedules[dateKey]};
       if (!schedule) {
         schedule = { maxId: 0 };
@@ -65,6 +64,31 @@ export default createStore({
       };
 
       schedule.todoList.push(todoObj);
+
+      storage.setData(dateKey, schedule);
+
+      dispatch('refreshSchedules');
+    },
+    deleteTodo({ state, dispatch }, { dateKey, id }) {
+      let schedule = {...state.schedules[dateKey]};
+      const idx = schedule.todoList.findIndex(todo => todo.id === id);
+      schedule.todoList.splice(idx, 1);
+
+      storage.setData(dateKey, schedule);
+
+      dispatch('refreshSchedules');
+    },
+    completeTodo({ state, dispatch }, { dateKey, id }) {
+      console.log('complete todo');
+      let schedule = {...state.schedules[dateKey]};
+      const idx = schedule.todoList.findIndex(todo => todo.id === id);
+      const completedTodo = schedule.todoList.splice(idx, 1)[0];
+      completedTodo.completedDate = Date.now();
+
+      if (!schedule.doneList) {
+        schedule.doneList = [];
+      }
+      schedule.doneList.unshift(completedTodo);
 
       storage.setData(dateKey, schedule);
 

@@ -51,6 +51,7 @@ export default {
   .input-card-area {
     width: inherit;
     height: inherit;
+    
     .buttons {
       display: flex;
       justify-content: space-around;

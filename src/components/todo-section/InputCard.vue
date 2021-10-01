@@ -25,6 +25,10 @@ export default {
 
 <style lang="scss" scoped>
   .todo-card {
+    &.active {
+      background-color: #081F5C;
+    }
+    
     input {
       text-align: center;
       font-size: inherit;

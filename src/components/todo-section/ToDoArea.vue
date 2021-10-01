@@ -3,34 +3,22 @@
     <div class="title">할 일 ({{ todoArr ? todoArr.length : 0 }})</div>
     <plus-button-card 
       @click="addInputCard"></plus-button-card>
-    <default-card 
+    <default-card-area 
       v-for="(todo, i) in todoArr"
       :key="i"
-      :todo="todo"></default-card>
+      :todo="todo"
+      :date="date"></default-card-area>
     <input-card-area 
       v-if="showInputCard"
       mode="create"
       @cancel-input="hideInputCard"
       @complete-input="addTodo"></input-card-area>
-
-    <!-- <input-card :value="'lorem ipsum lorem ip'"></input-card>
-    <default-card 
-      :text="'default text'"></default-card>
-    <default-card 
-      :text="'default text'"></default-card>
-    <div>
-      <action-button text="취소"></action-button>
-      <action-button text="완료"></action-button>
-      <action-button text="삭제"></action-button>
-      <action-button text="수정"></action-button>
-    </div> -->
   </div>
 </template>
 
 <script>
-import DefaultCard from './DefaultCard.vue';
+import DefaultCardArea from './DefaultCardArea.vue';
 import InputCardArea from './InputCardArea.vue';
-// import ActionButton from './ActionButton.vue'
 import PlusButtonCard from './PlusButtonCard.vue';
 import { mapActions } from 'vuex';
 
@@ -38,9 +26,8 @@ export default {
   name: 'ToDoArea',
   components: { 
     PlusButtonCard, 
-    DefaultCard,
     InputCardArea,
-    // ActionButton
+    DefaultCardArea
   },
   props: [
     'todoArr',
@@ -74,19 +61,4 @@ export default {
 </script>
 
 <style lang="scss">
-  .todo {
-    .todo-card {
-      &.default {
-        background-color: #5AAAFA;
-      }
-
-      &.active {
-        background-color: #081F5C;
-      }
-
-      &.tapped {
-        background-color: #007AFF;
-      }
-    }
-  }
 </style>

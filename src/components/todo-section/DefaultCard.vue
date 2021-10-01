@@ -1,5 +1,5 @@
 <template>
-  <div :class="`schedule-card todo-card ${bgClass}`">
+  <div :class="`schedule-card todo-card ${mode}`">
     <span>{{ todo.content }}</span>
   </div>
 </template>
@@ -8,15 +8,28 @@
 export default {
   name: 'DefaultCard',
   props: [
-    'todo'
+    'todo',
+    'mode'
   ],
   data() {
     return {
-      bgClass: 'default'
     };
+  },
+  computed: {
   }
 }
 </script>
 
 <style lang="scss" scoped>
+  .schedule-card {
+    cursor: pointer;
+
+    &.default {
+      background-color: #5AAAFA;
+    }
+
+    &.tapped {
+      background-color: #007AFF;
+    }
+  }
 </style>

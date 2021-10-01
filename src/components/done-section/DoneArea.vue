@@ -1,7 +1,10 @@
 <template>
   <div class="content done">
-    <div class="title">끝난 일 (0)</div>
-    <done-card text="물 마시기"></done-card>
+    <div class="title">끝난 일 ({{ doneArr ? doneArr.length : 0 }})</div>
+    <done-card 
+      v-for="(done, i) in doneArr"
+      :key="i"
+      :content="done.content"></done-card>
   </div>
 </template>
 
@@ -12,7 +15,10 @@ export default {
   name: 'DoneArea',
   components: {
     DoneCard
-  }
+  },
+  props: [
+    'doneArr'
+  ]
 }
 </script>
 
