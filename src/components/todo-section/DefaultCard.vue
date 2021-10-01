@@ -1,6 +1,6 @@
 <template>
   <div :class="`schedule-card todo-card ${bgClass}`">
-    <span>{{ text }}</span>
+    <span>{{ todo.content }}</span>
   </div>
 </template>
 
@@ -8,9 +8,13 @@
 export default {
   name: 'DefaultCard',
   props: [
-    'text',
-    'bgClass'
-  ]
+    'todo'
+  ],
+  data() {
+    return {
+      bgClass: 'default'
+    };
+  }
 }
 </script>
 

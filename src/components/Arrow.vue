@@ -19,7 +19,10 @@ export default {
 
 <style lang="scss">
   .arrow {
-    display: flex;
+    margin: {
+      top: auto;
+      bottom: auto;
+    }
 
     button {
       background-color: inherit;

@@ -1,15 +1,25 @@
 <template>
   <div class="schedule-card todo-card active">
-    <input type="text" :value="value">
+    <input type="text" v-model="inputValue">
   </div>
 </template>
 
 <script>
 export default {
   name: 'InputCard',
-  props: [
-    'value'
-  ]
+  data() {
+    return {
+      inputValue: ''
+    }
+  },
+  methods: {
+    focus() {
+      this.$el.children[0].focus();
+    },
+    getValue() {
+      return this.inputValue;
+    }
+  }
 }
 </script>
 

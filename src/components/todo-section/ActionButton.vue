@@ -7,7 +7,9 @@ export default {
   name: 'ActionButton',
   props: [
     'text'
-  ]
+  ],
+  methods: {
+  }
 }
 </script>
 
@@ -20,5 +22,6 @@ export default {
     color: #007AFF;
     border-radius: 8px;
     border: 0;
+    cursor: pointer;
   }
 </style>

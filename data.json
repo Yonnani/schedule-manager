@@ -1,0 +1,22 @@
+{
+  "2021-10-1": {
+    "todoList": [
+      {
+        "id": 1,
+        "order": 1,
+        "content": "lorem ipsum blahblah",
+        "completedDate": null
+      }
+    ],
+    "doneList": [
+      {
+        "id": 2,
+        "order": 1,
+        "content": "lorem ipsum blahblah 2",
+        "completedDate": 1633070764619
+      }
+    ],
+    "maxId": 2
+  },
+  "2021-10-2": null
+}

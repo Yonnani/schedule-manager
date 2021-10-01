@@ -8,7 +8,8 @@
     <day-card 
       v-for="(date, i) in Object.keys(schedules)"
       :key="i"
-      :date="date"></day-card>
+      :date="date"
+      :schedule="schedules[date]"></day-card>
 
     <right-arrow 
       v-if="cardNum === null || cardNum > 1" 
@@ -24,8 +25,9 @@
 <script>
 import LeftArrow from './components/LeftArrow.vue';
 import RightArrow from './components/RightArrow.vue';
-import DayCard from './components/DayCard.vue'
-import { mapGetters, mapActions, mapState, mapMutations } from 'vuex'
+import DayCard from './components/DayCard.vue';
+import { mapGetters, mapActions, mapState, mapMutations } from 'vuex';
+
 
 export default {
   name: 'App',
@@ -46,17 +48,16 @@ export default {
   },
   computed: {
     schedules() {
-      // todo. vuex로 옮기기
-      let schedules = {};
+      let keys = [];
       const quotient = Math.floor(this.cardNum / 2);
+
       for(let i = (0 - quotient); i < (this.cardNum - quotient); i++) {
         const thisDate = this.getDateByNumFromSelectedDate(i);
         const thisDateKey = this.getKeyStringFromDate(thisDate);
-        const thisDateSchedule = this.getData(thisDateKey);
-        schedules[thisDateKey] = thisDateSchedule;
+        keys.push(thisDateKey);
       }
-
-      return schedules;
+      this.setSchedulesFromKeyArr(keys);
+      return this.$store.state.schedules;
     },
     ...mapGetters([
       'getDateByNumFromSelectedDate'
@@ -86,17 +87,9 @@ export default {
       return maxNum % 2 === 0 ? maxNum - 1 : maxNum;
     },
     getKeyStringFromDate(date) {
+      // todo. mixin으로 빼기
       const thisDate = new Date(date);
       return `${thisDate.getFullYear()}-${thisDate.getMonth() + 1}-${thisDate.getDate()}`;
-    },
-    getData(key) {
-      const data = localStorage.getItem(key);
-      let parsedData = null;
-      if (data) {
-        parsedData = JSON.parse(data);
-      }
-
-      return parsedData;
     },
     setData(_key, _data) {
       this.data[_key] = _data;
@@ -104,7 +97,8 @@ export default {
     },
     ...mapActions([
       'goPrevDay',
-      'goNextDay'
+      'goNextDay',
+      'setSchedulesFromKeyArr'
     ]),
     ...mapMutations([
       'setCardNum'

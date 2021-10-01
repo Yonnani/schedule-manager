@@ -2,8 +2,11 @@
   <div class="card">
     <date-area 
       :date="date"></date-area>
-    <to-do-area></to-do-area>
-    <done-area></done-area>
+    <to-do-area
+      :date="date"
+      :todo-arr="schedule?.todoList"></to-do-area>
+    <done-area
+      :done-arr="schedule?.doneList"></done-area>
   </div>
 </template>
 
@@ -15,7 +18,8 @@ import ToDoArea from './todo-section/ToDoArea.vue'
 export default {
   name: 'DayCard',
   props: [
-    'date'
+    'date',
+    'schedule'
   ],
   components: {
     DateArea,
