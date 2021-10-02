@@ -1,8 +1,6 @@
 <template>
   <div :class="`schedule-card todo-card ${mode}`">
-    <!-- <div class="dropzone"></div> -->
     <span>{{ todo.content }}</span>
-    <!-- <div class="dropzone"></div> -->
   </div>
 </template>
 
@@ -38,15 +36,6 @@ export default {
 
     &.active {
       background-color: #081F5C;
-    }
-
-    .dropzone {
-      // position: relative;
-      width: inherit;
-      height: 10px;
-      border: 1px solid black;
-      margin: 0;
-      padding: 0;
     }
   }
 </style>
