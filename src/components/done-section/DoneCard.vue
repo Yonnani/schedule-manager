@@ -17,5 +17,6 @@ export default {
   .done-card {
     background-color: #969DAB;
     text-decoration-line: line-through;
+    margin-top: 10px;
   }
 </style>

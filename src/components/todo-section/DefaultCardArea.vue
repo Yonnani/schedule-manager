@@ -1,5 +1,14 @@
 <template>
-  <div v-if="mode !== 'modify'" class="default-card-area">
+  <div v-if="mode !== 'modify'" class="default-card-area"
+    :data-id="todo.id"
+    :data-order="todo.order"
+    :draggable="mode === 'default' ? true : false"
+    @dragstart="dragStart($event, {id: todo.id, order: todo.order})"
+    @dragend="dragEnd"
+    @drop="drop"
+    @dragover="dragOver"
+    @dragenter="dragEnter"
+    @dragleave="dragLeave">
     <default-card 
       :todo="todo"
       :mode="mode"
@@ -41,10 +50,72 @@ export default {
   ],
   data() {
     return {
-      mode: 'default' // default, tapped, modify
+      mode: 'default', // default, tapped, modify
     };
   },
   methods: {
+    dragStart(e, {id, order}) {
+      const scheduleCardNode = Array.from(e.currentTarget.childNodes).find($child => $child?.classList[0] === 'schedule-card');
+      scheduleCardNode.classList.add('active');
+      scheduleCardNode.classList.remove('default');
+      e.dataTransfer.setData('text/plain', JSON.stringify({id: id, order: order}));
+    },
+    dragEnd(e) {
+      const scheduleCardNode = Array.from(e.currentTarget.childNodes).find($child => $child?.classList[0] === 'schedule-card');
+      scheduleCardNode.classList.add('default');
+      scheduleCardNode.classList.remove('active');
+    },
+    drop(e) {
+      e.preventDefault();
+      const fromData = JSON.parse(e.dataTransfer.getData('text/plain'));
+      const toData = { 
+        id: Number(e.currentTarget.dataset.id), 
+        order: Number(e.currentTarget.dataset.order)
+      };
+
+      if (fromData.id !== toData.id) {
+        const currentY = e.offsetY;
+        const eleHeight = e.currentTarget.offsetHeight;
+        const centerY = Math.round(eleHeight / 2);
+        
+        if (currentY < centerY) {
+          this.changeOrder({ 
+            dateKey: this.date, 
+            fromId: fromData.id, 
+            toId: toData.id,
+            toOrder: toData.order 
+          });
+        } else {
+          this.changeOrder({ 
+            dateKey: this.date, 
+            fromId: fromData.id, 
+            toId: toData.id,
+            toOrder: (toData.order + 1) 
+          });
+        }
+      }
+    },
+    dragOver(e) {
+      e.preventDefault();
+      console.log('drag over ==== ', {currentTarget: e.currentTarget, target: e.target, toElement: e.toElement});
+      const currentY = e.offsetY;
+      const eleHeight = e.currentTarget.offsetHeight;
+      const centerY = Math.round(eleHeight / 2);
+      
+      if (currentY < centerY) {
+        // e.currentTarget.offsetTop += eleHeight;
+        // e.currentTarget.style.marginTop = `${eleHeight}px`
+      } else {
+        // e.currentTarget.nextSibling.offsetTop += eleHeight;
+        // e.currentTarget.nextSibling.style.marginTop = `${eleHeight}px`
+      }
+    },
+    dragEnter(e) {
+      console.log('drag enter ==== ', {e});
+    },
+    dragLeave(e) {
+      console.log('drag leave ==== ', {e});
+    },
     changeMode(_mode) {
       this.mode = _mode;
     },
@@ -79,7 +150,8 @@ export default {
     ...mapActions({
       deleteTodoSchedule: 'deleteTodo',
       completeTodoSchedule: 'completeTodo',
-      updateTodoSchedule: 'updateTodo'
+      updateTodoSchedule: 'updateTodo',
+      changeOrder: 'changeOrder'
     })
   }
 }
@@ -89,8 +161,8 @@ export default {
   .default-card-area {
     width: inherit;
     height: inherit;
-    margin: {
-      bottom: 5px;
+    padding: {
+      top: 10px;
     };
 
     .buttons {

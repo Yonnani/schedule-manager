@@ -46,10 +46,16 @@ export default createStore({
       commit('setSchedules', newSchedules);
     },
     addTodoSchedule({ state, dispatch }, { dateKey, todoContent }) {
-      let schedule = {...state.schedules[dateKey]};
-      if (!schedule) {
-        schedule = { maxId: 0 };
+      console.log('add todo schedule');
+      let schedule = {};
+      
+      const thisDateSchedule = state.schedules[dateKey];
+      if (!thisDateSchedule) {
+        schedule.maxId = 0;
+      } else {
+        schedule = {...thisDateSchedule};
       }
+      
       if (!schedule.todoList) {
         schedule.todoList = []; 
       }
@@ -88,7 +94,6 @@ export default createStore({
       dispatch('refreshSchedules');
     },
     completeTodo({ state, dispatch }, { dateKey, id }) {
-      console.log('complete todo');
       let schedule = {...state.schedules[dateKey]};
       const idx = schedule.todoList.findIndex(todo => todo.id === id);
       const completedTodo = schedule.todoList.splice(idx, 1)[0];
@@ -98,6 +103,29 @@ export default createStore({
         schedule.doneList = [];
       }
       schedule.doneList.unshift(completedTodo);
+
+      storage.setData(dateKey, schedule);
+
+      dispatch('refreshSchedules');
+    },
+    changeOrder({ state, dispatch }, { dateKey, fromId, toOrder }) {
+      let schedule = {...state.schedules[dateKey]};
+      console.log('change order ddd');
+      const fromIdx = schedule.todoList.findIndex(todo => todo.id === fromId);
+      const fromObj = schedule.todoList.splice(fromIdx, 1)[0];
+      fromObj.order = toOrder;
+
+      const toIdx = schedule.todoList.findIndex(todo => todo.order === toOrder);
+      if (toIdx < 0) {
+        schedule.todoList.push(fromObj);
+      } else {
+        schedule.todoList.forEach((todo, idx) => {
+          if (idx === toIdx || idx > toIdx) {
+            todo.order++;
+          }
+        });
+        schedule.todoList.splice(toIdx, 0, fromObj);
+      }
 
       storage.setData(dateKey, schedule);
 

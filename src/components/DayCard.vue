@@ -41,7 +41,11 @@ export default {
     align-content: center;
     min-height: 100%;
     max-width: 375px;
-    padding: 20px;
+    padding: {
+      left: 20px;
+      right: 20px;
+      bottom: 20px;
+    };
     margin: {
       left: auto;
       right: auto;
@@ -76,10 +80,6 @@ export default {
         display: flex;
         justify-content: center;
         align-items: center;
-        margin: {
-          top: 5px;
-          bottom: 5px;
-        };
       }
     }
 

@@ -65,6 +65,10 @@ export default {
     justify-content: center;
     align-items: center;
     height: 60px;
+    position: sticky;
+    top: 0;
+    padding-top: 20px;
+    background-color: white;
 
     .date-text {
       text-align: center;

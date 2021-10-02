@@ -111,15 +111,15 @@ export default {
   .main {
     display: flex;
     justify-content: space-between;
-    height: 100%;
+    min-height: 100%;
 
-    footer {
-      color: #000;
-      font-size: 12px;
-      text-align: center;
-      position: absolute;
-      bottom: 0;
-      right: 0
-    }
+  }
+  footer {
+    color: #000;
+    font-size: 12px;
+    text-align: center;
+    position: absolute;
+    bottom: 0;
+    right: 0
   }
 </style>
