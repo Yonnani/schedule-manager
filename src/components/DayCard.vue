@@ -42,8 +42,6 @@ export default {
     min-height: 100%;
     max-width: 375px;
     padding: {
-      left: 20px;
-      right: 20px;
       bottom: 20px;
     };
     margin: {
