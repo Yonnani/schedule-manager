@@ -53,6 +53,10 @@ export default {
   .input-card-area {
     width: inherit;
     height: inherit;
+    padding: {
+      top: 5px;
+      bottom: 5px;
+    };
 
     .buttons {
       display: flex;

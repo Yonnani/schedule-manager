@@ -23,5 +23,6 @@ export default {
     border-radius: 8px;
     border: 0;
     cursor: pointer;
+    margin: 5px;
   }
 </style>

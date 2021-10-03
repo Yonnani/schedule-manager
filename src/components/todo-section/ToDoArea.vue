@@ -61,4 +61,10 @@ export default {
 </script>
 
 <style lang="scss">
+  .todo-card {
+    padding: {
+      top: 5px;
+      bottom: 5px;
+    };
+  }
 </style>
