@@ -118,16 +118,14 @@ export default {
     },
     dragOver(e) {
       e.preventDefault();
-      console.log('drag over ==== ');
       const toNode = e.currentTarget;
       const fromChildNode = toNode.parentNode.querySelector('.active');
       const fromNode = fromChildNode.parentNode;
       const fromData = fromNode.dataset;
       const toId = toNode.dataset.id;
 
-      // toNode.style.position = 'absolute';
-
       if (fromData.id === toId) {
+        // swipe
         const halfWidth = Math.round(toNode.offsetWidth / 2);
         const curX = e.pageX;
         const fromX = fromData.startX;
@@ -149,7 +147,7 @@ export default {
           fromChildNode.classList.remove('is-being-completed');
         }
       } else {
-        console.log('change order');
+        // change order
       }
     },
     changeMode(_mode) {
