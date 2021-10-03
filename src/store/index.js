@@ -4,7 +4,7 @@ import storage from './storage/index';
 export default createStore({
   state() {
     return {
-      selectedDate: new Date(),
+      selectedDate: Date.now(),
       cardNum: null,
       schedules: null
     }

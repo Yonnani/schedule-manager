@@ -37,5 +37,14 @@ export default {
     &.active {
       background-color: #081F5C;
     }
+
+    &.is-being-completed {
+      background-color: #969DAB;
+      text-decoration-line: line-through;
+    }
+
+    &.is-being-deleted {
+      opacity: 50%;
+    }
   }
 </style>

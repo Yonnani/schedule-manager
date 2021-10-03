@@ -3,7 +3,7 @@
     :data-id="todo.id"
     :data-order="todo.order"
     :draggable="mode === 'default' ? true : false"
-    @dragstart="dragStart($event, {id: todo.id, order: todo.order})"
+    @dragstart="dragStart($event, {id: todo.id, order: todo.order, date: date})"
     @dragend="dragEnd"
     @drop="drop"
     @dragover="dragOver"
@@ -54,26 +54,36 @@ export default {
     };
   },
   methods: {
-    dragStart(e, {id, order}) {
-      const scheduleCardNode = Array.from(e.currentTarget.childNodes).find($child => $child?.classList[0] === 'schedule-card');
+    dragStart(e, {id, order, date}) {
+      const scheduleCardNode = Array.from(e.currentTarget.childNodes).find($child => $child?.classList?.[0] === 'schedule-card');
       scheduleCardNode.classList.add('active');
       scheduleCardNode.classList.remove('default');
-      e.dataTransfer.setData('text/plain', JSON.stringify({id: id, order: order}));
+
+      if (scheduleCardNode?.parentNode?.className === 'default-card-area') {
+        scheduleCardNode.parentNode.dataset.startX = e.pageX;
+        scheduleCardNode.parentNode.dataset.startY = e.pageY;
+      }
+
+      e.dataTransfer.setData('text/plain', JSON.stringify({id: id, order: order, date: date}));
     },
     dragEnd(e) {
-      const scheduleCardNode = Array.from(e.currentTarget.childNodes).find($child => $child?.classList[0] === 'schedule-card');
+      const scheduleCardNode = Array.from(e.currentTarget.childNodes).find($child => $child?.classList?.[0] === 'schedule-card');
       scheduleCardNode.classList.add('default');
       scheduleCardNode.classList.remove('active');
+      scheduleCardNode.classList.remove('is-being-completed');
+      scheduleCardNode.classList.remove('is-being-deleted');
     },
     drop(e) {
       e.preventDefault();
       const fromData = JSON.parse(e.dataTransfer.getData('text/plain'));
+      const targetData = e.currentTarget.dataset;
       const toData = { 
-        id: Number(e.currentTarget.dataset.id), 
-        order: Number(e.currentTarget.dataset.order)
+        id: Number(targetData.id), 
+        order: Number(targetData.order)
       };
 
       if (fromData.id !== toData.id) {
+        // order 변경
         const currentY = e.offsetY;
         const eleHeight = e.currentTarget.offsetHeight;
         const centerY = Math.round(eleHeight / 2);
@@ -93,21 +103,49 @@ export default {
             toOrder: (toData.order + 1) 
           });
         }
+      } else {
+        // swipe
+        if (targetData?.workType === 'complete') {
+          this.completeTodoSchedule({
+            dateKey: fromData.date, 
+            id: fromData.id
+          });
+        } else if (targetData?.workType === 'delete') {
+          this.deleteTodoSchedule({
+            dateKey: fromData.date, 
+            id: fromData.id
+          });
+        }
       }
     },
     dragOver(e) {
       e.preventDefault();
-      console.log('drag over ==== ', {currentTarget: e.currentTarget, target: e.target, toElement: e.toElement});
-      const currentY = e.offsetY;
-      const eleHeight = e.currentTarget.offsetHeight;
-      const centerY = Math.round(eleHeight / 2);
-      
-      if (currentY < centerY) {
-        // e.currentTarget.offsetTop += eleHeight;
-        // e.currentTarget.style.marginTop = `${eleHeight}px`
+      console.log('drag over ==== ');
+      const toNode = e.currentTarget;
+      const fromChildNode = toNode.parentNode.querySelector('.active');
+      const fromNode = fromChildNode.parentNode;
+      const fromData = fromNode.dataset;
+      const toId = toNode.dataset.id;
+
+      // toNode.style.position = 'absolute';
+
+      if (fromData.id === toId) {
+        const halfWidth = Math.round(toNode.offsetWidth / 2);
+        const curX = e.pageX;
+        const fromX = fromData.startX;
+        const moveXLength = curX - fromX;
+
+        if (Math.abs(moveXLength) >= halfWidth) {
+          if (moveXLength < 0) {
+            fromData.workType = 'delete';
+            fromChildNode.classList.add('is-being-deleted');
+          } else {
+            fromData.workType = 'complete';
+            fromChildNode.classList.add('is-being-completed');
+          }
+        }
       } else {
-        // e.currentTarget.nextSibling.offsetTop += eleHeight;
-        // e.currentTarget.nextSibling.style.marginTop = `${eleHeight}px`
+        console.log('change order');
       }
     },
     dragEnter(e) {
