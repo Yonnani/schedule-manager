@@ -40,7 +40,6 @@ export default createStore({
       commit('setSchedules', newSchedules);
     },
     addTodoSchedule({ state, dispatch, getters }, { dateKey, todoContent }) {
-      console.log('add todo schedule');
       let schedule = {};
       
       const thisDateSchedule = state.schedules[dateKey];
@@ -104,7 +103,6 @@ export default createStore({
     },
     changeOrder({ state, dispatch, getters }, { dateKey, fromId, toOrder }) {
       let schedule = {...state.schedules[dateKey]};
-      console.log('change order ddd');
       const fromIdx = schedule.todoList.findIndex(todo => todo.id === fromId);
       const fromObj = schedule.todoList.splice(fromIdx, 1)[0];
       fromObj.order = toOrder;
