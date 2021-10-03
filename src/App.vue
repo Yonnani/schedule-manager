@@ -15,10 +15,6 @@
       v-if="cardNum === null || cardNum > 1" 
       :width="arrowSize" :height="arrowSize"
       @click="goNextDay()"></right-arrow>
-    
-    <footer>
-      <div>Arrow Icons made by <a href="https://www.flaticon.com/authors/roundicons" title="Roundicons">Roundicons</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
-    </footer>
   </div>
 </template>
 
@@ -87,7 +83,6 @@ export default {
       return maxNum % 2 === 0 ? maxNum - 1 : maxNum;
     },
     getKeyStringFromDate(date) {
-      // todo. mixin으로 빼기
       const thisDate = new Date(date);
       return `${thisDate.getFullYear()}-${thisDate.getMonth() + 1}-${thisDate.getDate()}`;
     },
@@ -112,14 +107,5 @@ export default {
     display: flex;
     justify-content: space-between;
     min-height: 100%;
-
-  }
-  footer {
-    color: #000;
-    font-size: 12px;
-    text-align: center;
-    position: absolute;
-    bottom: 0;
-    right: 0
   }
 </style>

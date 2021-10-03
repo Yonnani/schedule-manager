@@ -2,7 +2,9 @@
   <arrow 
     :arrow-value="require(`@/assets/icons/right-arrow.svg`)"
     :width="width"
-    :height="height"></arrow>
+    :height="height"
+    text="right arrow"
+    copyright="Icons made by Roundicons from www.flaticon.com"></arrow>
 </template>
 
 <script>

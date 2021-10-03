@@ -1,7 +1,11 @@
 <template>
   <div class="arrow">
     <button>
-      <img :src="arrowValue" alt="" :width="width" :height="height">
+      <img :src="arrowValue" 
+        :alt="text" 
+        :width="width" 
+        :height="height"
+        :copyright="copyright">
     </button>
   </div>
 </template>
@@ -12,7 +16,9 @@ export default {
   props: [
     'arrowValue',
     'width',
-    'height'
+    'height',
+    'text',
+    'copyright'
   ]
 }
 </script>
