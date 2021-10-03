@@ -52,7 +52,7 @@ export default {
         const thisDateKey = this.getKeyStringFromDate(thisDate);
         keys.push(thisDateKey);
       }
-      this.setSchedulesFromKeyArr(keys);
+      this.refreshSchedules(keys);
       return this.$store.state.schedules;
     },
     ...mapGetters([
@@ -93,7 +93,7 @@ export default {
     ...mapActions([
       'goPrevDay',
       'goNextDay',
-      'setSchedulesFromKeyArr'
+      'refreshSchedules'
     ]),
     ...mapMutations([
       'setCardNum'
