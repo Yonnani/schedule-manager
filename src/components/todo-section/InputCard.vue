@@ -17,7 +17,9 @@ export default {
   },
   methods: {
     focus() {
-      this.$el.children[0].focus();
+      const $input = this.$el.children[0];
+      $input.focus();
+      $input.scrollIntoView({ behavior: "smooth", block: "center" });
     },
     getValue() {
       return this.inputValue;
