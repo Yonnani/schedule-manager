@@ -10,7 +10,7 @@
     <default-card 
       :todo="todo"
       :mode="mode"
-      @click="changeMode('tapped')"></default-card>
+      @click="changeMode(getOppositeMode())"></default-card>
     <div v-if="mode === 'tapped'" class="buttons">
       <action-button text="삭제"
         @click="deleteTodo"></action-button>
@@ -154,6 +154,10 @@ export default {
     },
     changeMode(_mode) {
       this.mode = _mode;
+    },
+    getOppositeMode() {
+      if (this.mode === 'tapped') return 'default';
+      else if (this.mode === 'default') return 'tapped';
     },
     deleteTodo() {
       this.deleteTodoSchedule({
