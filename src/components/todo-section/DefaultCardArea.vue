@@ -6,9 +6,7 @@
     @dragstart="dragStart($event, {id: todo.id, order: todo.order, date: date})"
     @dragend="dragEnd"
     @drop="drop"
-    @dragover="dragOver"
-    @dragenter="dragEnter"
-    @dragleave="dragLeave">
+    @dragover="dragOver">
     <default-card 
       :todo="todo"
       :mode="mode"
@@ -138,21 +136,21 @@ export default {
         if (Math.abs(moveXLength) >= halfWidth) {
           if (moveXLength < 0) {
             fromData.workType = 'delete';
+            fromChildNode.classList.remove('is-being-completed');
             fromChildNode.classList.add('is-being-deleted');
           } else {
             fromData.workType = 'complete';
+            fromChildNode.classList.remove('is-being-deleted');
             fromChildNode.classList.add('is-being-completed');
           }
+        } else {
+          fromData.workType = '';
+          fromChildNode.classList.remove('is-being-deleted');
+          fromChildNode.classList.remove('is-being-completed');
         }
       } else {
         console.log('change order');
       }
-    },
-    dragEnter(e) {
-      console.log('drag enter ==== ', {e});
-    },
-    dragLeave(e) {
-      console.log('drag leave ==== ', {e});
     },
     changeMode(_mode) {
       this.mode = _mode;
@@ -200,8 +198,13 @@ export default {
     width: inherit;
     height: inherit;
     padding: {
-      top: 10px;
+      top: 5px;
+      bottom: 5px;
     };
+
+    &:last-of-type {
+      padding-bottom: 10px;
+    }
 
     .buttons {
       display: flex;
