@@ -14,6 +14,7 @@ module.exports = {
         additionalData: `
           @import "~@/assets/_global.scss";
           @import "~@/assets/_reset.scss";
+          @import "~@/assets/_variables.scss";
         `
       }
     }

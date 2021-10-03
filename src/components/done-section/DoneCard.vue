@@ -15,7 +15,7 @@ export default {
 
 <style lang="scss" scoped>
   .done-card {
-    background-color: #969DAB;
+    background-color: $color-completed;
     text-decoration-line: line-through;
     margin-top: 10px;
   }

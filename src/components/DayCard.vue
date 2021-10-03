@@ -76,7 +76,7 @@ export default {
         height: 68px;
         border-radius: 12px;
         font-size: 17px;
-        color: #FFFFFF;
+        color: $color-font-white;
         display: flex;
         justify-content: center;
         align-items: center;

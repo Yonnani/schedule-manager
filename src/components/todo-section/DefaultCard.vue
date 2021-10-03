@@ -27,19 +27,19 @@ export default {
     flex-direction: column;
 
     &.default {
-      background-color: #5AAAFA;
+      background-color: $color-default;
     }
 
     &.tapped {
-      background-color: #007AFF;
+      background-color: $color-tapped;
     }
 
     &.active {
-      background-color: #081F5C;
+      background-color: $color-active;
     }
 
     &.is-being-completed {
-      background-color: #969DAB;
+      background-color: $color-completed;
       text-decoration-line: line-through;
     }
 

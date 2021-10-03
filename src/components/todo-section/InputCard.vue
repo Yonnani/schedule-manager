@@ -44,7 +44,7 @@ export default {
 <style lang="scss" scoped>
   .todo-card {
     &.active {
-      background-color: #081F5C;
+      background-color: $color-active;
     }
     
     input {
@@ -57,7 +57,7 @@ export default {
       outline-style: none;
 
       &.red {
-        color: red;
+        color: $color-font-red;
       }
     }
   }

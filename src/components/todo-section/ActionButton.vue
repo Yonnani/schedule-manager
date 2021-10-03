@@ -18,8 +18,8 @@ export default {
     width: 100px;
     height: 44px;
     font-size: 15px;
-    background-color: #EEEEEE;
-    color: #007AFF;
+    background-color: $color-bt-bg;
+    color: $color-bt-font;
     border-radius: 8px;
     border: 0;
     cursor: pointer;
