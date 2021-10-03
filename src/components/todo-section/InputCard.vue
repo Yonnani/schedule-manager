@@ -1,6 +1,9 @@
 <template>
   <div class="schedule-card todo-card active">
-    <input type="text" v-model="inputValue">
+    <input 
+      type="text" 
+      v-model="inputValue"
+      @keyup="checkLength($event, this)">
   </div>
 </template>
 
@@ -21,6 +24,16 @@ export default {
     },
     setValue(_value) {
       this.inputValue = _value;
+    },
+    checkLength(e, component) {
+      const value = component.$data.inputValue;
+      if (value.length > 20) {
+        e.currentTarget.classList.add('red');
+        component.$data.inputValue = value.slice(0, 20);
+      } else {
+        e.currentTarget.classList.remove('red');
+        component.$data.inputValue = value;
+      }
     }
   }
 }
@@ -40,6 +53,10 @@ export default {
       border-radius: 0;
       border: 0;
       outline-style: none;
+
+      &.red {
+        color: red;
+      }
     }
   }
 </style>
