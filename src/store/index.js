@@ -5,8 +5,8 @@ export default createStore({
   state() {
     return {
       selectedDate: Date.now(),
-      cardNum: null,
-      schedules: null
+      cardNum: 1,
+      schedules: {}
     }
   },
   mutations: {
@@ -21,17 +21,24 @@ export default createStore({
     }
   },
   actions: {
-    goPrevDay({ commit, getters }) {
+    goPrevDay({ commit, getters, dispatch }) {
       const date = getters.getDateByNumFromSelectedDate(-1);
       commit('setSelectedDate', date);
+      dispatch('refreshSchedules');
     },
-    goNextDay({ commit, getters }) {
+    goNextDay({ commit, getters, dispatch }) {
       const date = getters.getDateByNumFromSelectedDate(1);
       commit('setSelectedDate', date);
+      dispatch('refreshSchedules');
     },
-    refreshSchedules({ commit }, dateKeyStrArr) {
+    refreshSchedules({ commit, getters }, dateKeyStrArr) {
       const newSchedules = {};
-      dateKeyStrArr.forEach(dateKey => {
+
+      let keys = dateKeyStrArr;
+      if (!keys) {
+        keys = getters.getDateKeys;
+      }
+      keys.forEach(dateKey => {
         const schedule = storage.getData(dateKey);
         schedule?.todoList?.sort((a, b) => a.order - b.order);
         schedule?.doneList?.sort((a, b) => b.completedDate - a.completedDate);
@@ -39,7 +46,7 @@ export default createStore({
       });
       commit('setSchedules', newSchedules);
     },
-    addTodoSchedule({ state, dispatch, getters }, { dateKey, todoContent }) {
+    addTodoSchedule({ state }, { dateKey, todoContent }) {
       let schedule = {};
       
       const thisDateSchedule = state.schedules[dateKey];
@@ -66,27 +73,27 @@ export default createStore({
 
       storage.setData(dateKey, schedule);
 
-      dispatch('refreshSchedules', getters.getDatesShown());
+      // dispatch('refreshSchedules');
     },
-    deleteTodo({ state, dispatch, getters }, { dateKey, id }) {
+    deleteTodo({ state, dispatch }, { dateKey, id }) {
       let schedule = {...state.schedules[dateKey]};
       const idx = schedule.todoList.findIndex(todo => todo.id === id);
       schedule.todoList.splice(idx, 1);
 
       storage.setData(dateKey, schedule);
 
-      dispatch('refreshSchedules', getters.getDatesShown());
+      dispatch('refreshSchedules');
     },
-    updateTodo({ state, dispatch, getters }, { dateKey, id, content }) {
+    updateTodo({ state, dispatch }, { dateKey, id, content }) {
       let schedule = {...state.schedules[dateKey]};
       const idx = schedule.todoList.findIndex(todo => todo.id === id);
       schedule.todoList[idx].content = content;
 
       storage.setData(dateKey, schedule);
 
-      dispatch('refreshSchedules', getters.getDatesShown());
+      dispatch('refreshSchedules');
     },
-    completeTodo({ state, dispatch, getters }, { dateKey, id }) {
+    completeTodo({ state, dispatch }, { dateKey, id }) {
       let schedule = {...state.schedules[dateKey]};
       const idx = schedule.todoList.findIndex(todo => todo.id === id);
       const completedTodo = schedule.todoList.splice(idx, 1)[0];
@@ -99,29 +106,44 @@ export default createStore({
 
       storage.setData(dateKey, schedule);
 
-      dispatch('refreshSchedules', getters.getDatesShown());
+      dispatch('refreshSchedules');
     },
-    changeOrder({ state, dispatch, getters }, { dateKey, fromId, toOrder }) {
+    // changeOrder({ state, dispatch }, { dateKey, fromId, toOrder }) {
+    //   let schedule = {...state.schedules[dateKey]};
+    //   const fromIdx = schedule.todoList.findIndex(todo => todo.id === fromId);
+    //   const fromObj = schedule.todoList.splice(fromIdx, 1)[0];
+    //   fromObj.order = toOrder;
+
+    //   const toIdx = schedule.todoList.findIndex(todo => todo.order === toOrder);
+    //   if (toIdx < 0) {
+    //     schedule.todoList.push(fromObj);
+    //   } else {
+    //     schedule.todoList.forEach((todo, idx) => {
+    //       if (idx === toIdx || idx > toIdx) {
+    //         todo.order++;
+    //       }
+    //     });
+    //     schedule.todoList.splice(toIdx, 0, fromObj);
+    //   }
+
+    //   storage.setData(dateKey, schedule);
+
+    //   dispatch('refreshSchedules');
+    // },
+    changeTodoOrders({ state, dispatch }, { dateKey, newTodoArr }) {
       let schedule = {...state.schedules[dateKey]};
-      const fromIdx = schedule.todoList.findIndex(todo => todo.id === fromId);
-      const fromObj = schedule.todoList.splice(fromIdx, 1)[0];
-      fromObj.order = toOrder;
-
-      const toIdx = schedule.todoList.findIndex(todo => todo.order === toOrder);
-      if (toIdx < 0) {
-        schedule.todoList.push(fromObj);
-      } else {
-        schedule.todoList.forEach((todo, idx) => {
-          if (idx === toIdx || idx > toIdx) {
-            todo.order++;
-          }
-        });
-        schedule.todoList.splice(toIdx, 0, fromObj);
-      }
-
+      console.log('------------- changeTodoOrders ');
+      schedule.todoList = newTodoArr.map(todo => {
+        return {
+          ...todo,
+          id: Number(todo.id),
+          completedDate: null
+        };
+      });
+      
       storage.setData(dateKey, schedule);
 
-      dispatch('refreshSchedules', getters.getDatesShown());
+      dispatch('refreshSchedules');
     }
   },
   getters: {
@@ -130,6 +152,19 @@ export default createStore({
     },
     getDatesShown: (state) => () => {
       return Object.keys(state.schedules);
+    },
+    getDateKeys(state) {
+      let keys = [];
+      const quotient = Math.floor(state.cardNum / 2);
+
+      for(let i = (0 - quotient); i < (state.cardNum - quotient); i++) {
+        const thisDate = state.selectedDate.valueOf() + (1000 * 60 * 60 * 24 * i);
+        const date = new Date(thisDate);
+        const thisDateKey = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
+        keys.push(thisDateKey);
+      }
+
+      return keys;
     }
   },
   modules: {

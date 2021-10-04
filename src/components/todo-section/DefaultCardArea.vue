@@ -1,16 +1,21 @@
 <template>
-  <div v-if="mode !== 'modify'" class="default-card-area"
+  <div 
+    v-if="mode !== 'modify'" 
+    class="default-card-area"
     :data-id="todo.id"
     :data-order="todo.order"
+    :data-content="todo.content"
     :draggable="mode === 'default' ? true : false"
     @dragstart="dragStart($event, {id: todo.id, order: todo.order, date: date})"
     @dragend="dragEnd"
     @drop="drop"
-    @dragover="dragOver">
+    @dragover="dragOver($event, this)">
+
     <default-card 
       :todo="todo"
       :mode="mode"
       @click="changeMode(getOppositeMode())"></default-card>
+    
     <div v-if="mode === 'tapped'" class="buttons">
       <action-button text="삭제"
         @click="deleteTodo"></action-button>
@@ -20,6 +25,7 @@
         @click="completeTodo"></action-button>
     </div>
   </div>
+
   <template v-else>
     <input-card-area
       mode="modify"
@@ -53,7 +59,9 @@ export default {
   },
   methods: {
     dragStart(e, {id, order, date}) {
-      const scheduleCardNode = Array.from(e.currentTarget.childNodes).find($child => $child?.classList?.[0] === 'schedule-card');
+      console.log('card area drag start <<<<');
+      const scheduleCardNode = Array.from(e.currentTarget.children)
+        .find($child => $child?.classList?.[0] === 'schedule-card');
       scheduleCardNode.classList.add('active');
       scheduleCardNode.classList.remove('default');
 
@@ -65,7 +73,9 @@ export default {
       e.dataTransfer.setData('text/plain', JSON.stringify({id: id, order: order, date: date}));
     },
     dragEnd(e) {
-      const scheduleCardNode = Array.from(e.currentTarget.childNodes).find($child => $child?.classList?.[0] === 'schedule-card');
+      console.log('card area drag end <<<<');
+      const scheduleCardNode = Array.from(e.currentTarget.children)
+        .find($child => $child?.classList?.[0] === 'schedule-card');
       scheduleCardNode.classList.add('default');
       scheduleCardNode.classList.remove('active');
       scheduleCardNode.classList.remove('is-being-completed');
@@ -73,35 +83,37 @@ export default {
     },
     drop(e) {
       e.preventDefault();
+      console.log('card area drop <<<<');
       const fromData = JSON.parse(e.dataTransfer.getData('text/plain'));
       const targetData = e.currentTarget.dataset;
-      const toData = { 
-        id: Number(targetData.id), 
-        order: Number(targetData.order)
-      };
+      // const toData = { 
+      //   id: Number(targetData.id), 
+      //   order: Number(targetData.order)
+      // };
 
-      if (fromData.id !== toData.id) {
-        // order 변경
-        const currentY = e.offsetY;
-        const eleHeight = e.currentTarget.offsetHeight;
-        const centerY = Math.round(eleHeight / 2);
+      // if (fromData.id !== toData.id) {
+      //   // order 변경
+      //   console.log('card area drop <<<< order chaged !!!');
+      //   const currentY = e.offsetY;
+      //   const eleHeight = e.currentTarget.offsetHeight;
+      //   const centerY = Math.round(eleHeight / 2);
         
-        if (currentY < centerY) {
-          this.changeOrder({ 
-            dateKey: this.date, 
-            fromId: fromData.id, 
-            toId: toData.id,
-            toOrder: toData.order 
-          });
-        } else {
-          this.changeOrder({ 
-            dateKey: this.date, 
-            fromId: fromData.id, 
-            toId: toData.id,
-            toOrder: (toData.order + 1) 
-          });
-        }
-      } else {
+      //   if (currentY < centerY) {
+      //     this.changeOrder({ 
+      //       dateKey: this.date, 
+      //       fromId: fromData.id, 
+      //       toId: toData.id,
+      //       toOrder: toData.order 
+      //     });
+      //   } else {
+      //     this.changeOrder({ 
+      //       dateKey: this.date, 
+      //       fromId: fromData.id, 
+      //       toId: toData.id,
+      //       toOrder: (toData.order + 1) 
+      //     });
+      //   }
+      // } else {
         // swipe
         if (targetData?.workType === 'complete') {
           this.completeTodoSchedule({
@@ -114,10 +126,11 @@ export default {
             id: fromData.id
           });
         }
-      }
+      // }
     },
     dragOver(e) {
       e.preventDefault();
+      console.log('card area drag over <<<<');
       const toNode = e.currentTarget;
       const fromChildNode = toNode.parentNode.querySelector('.active');
       const fromNode = fromChildNode.parentNode;
@@ -150,6 +163,15 @@ export default {
         // change order
       }
     },
+    resetNodePaddingY($node) {
+      $node.style.paddingTop = '5px';
+      $node.style.paddingBottom = '5px';
+    },
+    // dragLeave(e, $component) {
+    //   console.log('drag leave drag leave drag leave drag leave');
+    //   const toNode = e.currentTarget;
+    //   $component.resetNodePaddingY(toNode);
+    // },
     changeMode(_mode) {
       this.mode = _mode;
     },
@@ -188,8 +210,7 @@ export default {
     ...mapActions({
       deleteTodoSchedule: 'deleteTodo',
       completeTodoSchedule: 'completeTodo',
-      updateTodoSchedule: 'updateTodo',
-      changeOrder: 'changeOrder'
+      updateTodoSchedule: 'updateTodo'
     })
   }
 }

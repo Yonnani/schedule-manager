@@ -43,29 +43,19 @@ export default {
     this.init();
   },
   computed: {
-    schedules() {
-      let keys = [];
-      const quotient = Math.floor(this.cardNum / 2);
-
-      for(let i = (0 - quotient); i < (this.cardNum - quotient); i++) {
-        const thisDate = this.getDateByNumFromSelectedDate(i);
-        const thisDateKey = this.getKeyStringFromDate(thisDate);
-        keys.push(thisDateKey);
-      }
-      this.refreshSchedules(keys);
-      return this.$store.state.schedules;
-    },
     ...mapGetters([
-      'getDateByNumFromSelectedDate'
+      'getDateByNumFromSelectedDate',
+      'getDateKeys'
     ]),
     ...mapState([
-      'cardNum'
+      'cardNum',
+      'schedules'
     ])
   },
   methods: {
     init() {
       const arrowChildren = Array.from(this.$el.children).filter(child => child.className === 'arrow');
-      if (arrowChildren) {
+      if (arrowChildren && arrowChildren[0]) {
         this.arrowOffsetWidth = arrowChildren[0].offsetWidth;
       }
       
@@ -75,8 +65,12 @@ export default {
         if (this.cardNum === null || this.cardNum !== computedCardNum) {
           this.setCardNum(computedCardNum < 1 ? 1 : computedCardNum);
         }
+        console.log('resize observer called');
+        this.refreshSchedules(this.getDateKeys);
       });
       resizeObserver.observe(this.$el);
+      
+      this.refreshSchedules(this.getDateKeys);
     },
     getCardNum(_width) {
       const maxNum = Math.floor(_width / this.cardWidth);
