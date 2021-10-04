@@ -41,10 +41,12 @@ export default {
     &.is-being-completed {
       background-color: $color-completed;
       text-decoration-line: line-through;
+      transition: all 1s;
     }
 
     &.is-being-deleted {
       opacity: 50%;
+      transition: all 1s;
     }
   }
 </style>
