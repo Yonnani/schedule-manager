@@ -16,5 +16,6 @@ export default {
     height: 100%;
     font-size: inherit;
     border-radius: inherit;
+    cursor: pointer;
   }
 </style>
