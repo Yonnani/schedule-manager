@@ -131,22 +131,6 @@ export default createStore({
     getDatesShown: (state) => () => {
       return Object.keys(state.schedules);
     }
-    // getDateKeyStringFromNum: (_, getters) => (num) => {
-    //   const dateMillisec = getters.getDateByNumFromSelectedDate(num);
-    //   const date = new Date(dateMillisec);
-    //   return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
-    // },
-    // getSchedules(state, getters) {
-    //   let schedules = {};
-    //   const quotient = Math.floor(state.cardNum / 2);
-    //   for(let i = (0 - quotient); i < (state.cardNum - quotient); i++) {
-    //     const dateKeyStr = getters.getDateKeyStringFromNum(i);
-        
-    //     const thisDateSchedule = this.getDateData(thisDateKey);
-    //     schedules[thisDateKey] = thisDateSchedule;
-    //   }
-    //   return state.schedules;
-    // }
   },
   modules: {
   }
