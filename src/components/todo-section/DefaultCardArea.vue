@@ -107,7 +107,7 @@ export default {
         const moveXLength = curX - fromX;
 
         fromChildNode.style.position = 'relative';
-        fromChildNode.style.left = `${fromNode.offsetLeft + moveXLength}px`;
+        fromChildNode.style.left = `${moveXLength}px`;
 
         if (Math.abs(moveXLength) >= halfWidth) {
           if (moveXLength < 0) {
