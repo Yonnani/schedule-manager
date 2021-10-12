@@ -88,10 +88,11 @@ export default {
       scheduleCardNode.classList.remove('active');
       scheduleCardNode.classList.remove('is-being-completed');
       scheduleCardNode.classList.remove('is-being-deleted');
+      scheduleCardNode.style.position = '';
+      scheduleCardNode.style.left = '';
     },
     dragOver(e) {
       e.preventDefault();
-      console.log('card area drag over <<<<');
       const toNode = e.currentTarget;
       const fromChildNode = toNode.parentNode.querySelector('.active');
       const fromNode = fromChildNode.parentNode;
@@ -104,6 +105,9 @@ export default {
         const curX = e.pageX;
         const fromX = fromData.startX;
         const moveXLength = curX - fromX;
+
+        fromChildNode.style.position = 'relative';
+        fromChildNode.style.left = `${fromNode.offsetLeft + moveXLength}px`;
 
         if (Math.abs(moveXLength) >= halfWidth) {
           if (moveXLength < 0) {
@@ -122,6 +126,8 @@ export default {
         }
       } else {
         // change order
+        fromChildNode.style.position = '';
+        fromChildNode.style.left = '';
       }
     },
     changeMode(_mode) {

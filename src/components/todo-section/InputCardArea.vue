@@ -30,7 +30,6 @@ export default {
     'content'
   ],
   mounted() {
-    console.log({ inputCardModes });
     this.$refs.input.focus();
     if (this.mode === inputCardModes.MODIFY && this.content) {
       this.$refs.input.setValue(this.content);
