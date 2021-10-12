@@ -5,13 +5,13 @@
       @click="addInputCard"></plus-button-card>
     
     <div class="todo-default-cards"
-      @dragover="dragOver($event, this)"
-      @drop="drop($event, this)"
+      @drop="drop"
       ref="todoDefaultCards">
       <default-card-area 
-        v-for="(todo) in todoArr"
-        :key="todo.order"
+        v-for="(todo, index) in todoArr"
+        :key="index"
         :todo="todo"
+        :index="index"
         :date="date"></default-card-area>
     </div>
     
@@ -47,60 +47,41 @@ export default {
     };
   },
   methods: {
-    dragOver(e, $this) {
+    drop(e) {
       e.preventDefault();
-      const container = $this.$refs.todoDefaultCards;
-      const afterEle = $this.getDragAfterElement(container, e.clientY);
-      const draggable = Array.from(container.children)
-        .find(child => {
-          if (child.className === 'default-card-area') {
-            const classSet = new Set(child.children[0].classList);
-            return classSet.has('active');
+      const target = e.target.closest('.default-card-area');
+      if (target) {
+        const fromData = JSON.parse(e.dataTransfer.getData('text/plain'));
+        const toData = {
+          id: Number(target.dataset.id),
+          order: Number(target.dataset.order),
+          index: Number(target.dataset.index)
+        };
+        
+        if (fromData.id === toData.id) {
+          const targetData = target.dataset;
+          if (targetData?.workType === 'complete') {
+            this.completeTodo({
+              dateKey: fromData.date, 
+              id: fromData.id
+            });
+          } else if (targetData?.workType === 'delete') {
+            this.deleteTodo({
+              dateKey: fromData.date, 
+              id: fromData.id
+            });
           }
-          return false;
-        });
-      if (afterEle == null) {
-        container.appendChild(draggable);
-      } else {
-        container.insertBefore(draggable, afterEle);
-      }
-    },
-    drop(e, $this) {
-      e.preventDefault();
-      const newTodoObjArr = 
-        Array.from(e.currentTarget.children)
-          .map((child, index) => {
-            return {
-              id: child.dataset.id,
-              order: index + 1,
-              content: child.dataset.content
-            };
-          });
-      this.changeTodoOrders({
-        dateKey: $this.$props.date,
-        newTodoArr: newTodoObjArr
-      });
-    },
-    getDragAfterElement(container, y) {
-      const draggableEles = 
-        Array.from(container.children)
-        .filter(child => {
-          if (child.className === 'default-card-area') {
-            const classSet = new Set(child.children[0].classList);
-            return !classSet.has('active');
-          }
-          return false;
-        });
-
-      return draggableEles.reduce((closest, child) => {
-        const box = child.getBoundingClientRect();
-        const offset = y - box.top - box.height / 2;
-        if (offset < 0 && offset > closest.offset) {
-          return { offset: offset, element: child };
         } else {
-          return closest;
+          const copiedTodoArr = [...this.todoArr];
+          const fromEle = copiedTodoArr.splice(fromData.index, 1)[0];
+          copiedTodoArr.splice(toData.index, 0, fromEle);
+          copiedTodoArr.forEach((todo, index) => todo.order = index + 1);
+          this.changeTodoOrders({
+            dateKey: this.$props.date,
+            newTodoArr: copiedTodoArr
+          });
         }
-      }, { offset: Number.NEGATIVE_INFINITY }).element;
+      }
     },
     addInputCard() {
       this.showInputCard = true;
@@ -118,7 +99,8 @@ export default {
     ...mapActions([
       'addTodoSchedule',
       'changeTodoOrders',
-      'refreshSchedules'
+      'completeTodo',
+      'deleteTodo'
     ])
   }
 }
