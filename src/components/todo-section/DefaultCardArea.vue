@@ -1,12 +1,12 @@
 <template>
   <div 
-    v-if="mode !== 'modify'" 
+    v-if="mode !== modes.MODIFY" 
     class="default-card-area"
     :data-id="todo.id"
     :data-order="todo.order"
     :data-content="todo.content"
     :data-index="index"
-    :draggable="mode === 'default' ? true : false"
+    :draggable="mode === modes.DEFAULT ? true : false"
     @dragstart="dragStart"
     @dragend="dragEnd"
     @dragover="dragOver">
@@ -16,7 +16,7 @@
       :mode="mode"
       @click="changeMode(getOppositeMode())"></default-card>
     
-    <div v-if="mode === 'tapped'" class="buttons">
+    <div v-if="mode === modes.TAPPED" class="buttons">
       <action-button text="삭제"
         @click="deleteTodo"></action-button>
       <action-button text="수정"
@@ -40,6 +40,7 @@ import ActionButton from './ActionButton.vue'
 import DefaultCard from './DefaultCard.vue'
 import InputCardArea from './InputCardArea.vue'
 import { mapActions } from 'vuex';
+import { defaultCardModes } from '../../constants.js'
 
 export default {
   name: 'DefaultCardArea',
@@ -55,7 +56,8 @@ export default {
   ],
   data() {
     return {
-      mode: 'default', // default, tapped, modify
+      mode: defaultCardModes.DEFAULT,
+      modes: defaultCardModes
     };
   },
   methods: {
@@ -126,28 +128,28 @@ export default {
       this.mode = _mode;
     },
     getOppositeMode() {
-      if (this.mode === 'tapped') return 'default';
-      else if (this.mode === 'default') return 'tapped';
+      if (this.mode === defaultCardModes.TAPPED) return defaultCardModes.DEFAULT;
+      else if (this.mode === defaultCardModes.DEFAULT) return defaultCardModes.TAPPED;
     },
     deleteTodo() {
       this.deleteTodoSchedule({
         dateKey: this.date,
         id: this.todo.id
       });
-      this.mode = 'default';
+      this.mode = defaultCardModes.DEFAULT;
     },
     modifyTodo() {
-      this.changeMode('modify');
+      this.changeMode(defaultCardModes.MODIFY);
     },
     completeTodo() {
       this.completeTodoSchedule({
         dateKey: this.date,
         id: this.todo.id
       });
-      this.mode = 'default';
+      this.mode = defaultCardModes.DEFAULT;
     },
     cancelInput() {
-      this.mode = 'default';
+      this.mode = defaultCardModes.DEFAULT;
     },
     updateTodo({ content }) {
       this.updateTodoSchedule({
@@ -155,7 +157,7 @@ export default {
         id: this.todo.id, 
         content: content
       });
-      this.mode = 'default';
+      this.mode = defaultCardModes.DEFAULT;
     },
     ...mapActions({
       deleteTodoSchedule: 'deleteTodo',
@@ -174,10 +176,6 @@ export default {
       top: 5px;
       bottom: 5px;
     };
-
-    &:last-of-type {
-      padding-bottom: 10px;
-    }
 
     .buttons {
       display: flex;

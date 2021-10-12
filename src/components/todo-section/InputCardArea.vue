@@ -3,9 +3,9 @@
     <input-card ref="input"></input-card>
     <div class="buttons">
       <action-button text="취소"
-        @click="cancel()"></action-button>
+        @click="cancel"></action-button>
       <action-button text="완료"
-        @click="complete()"></action-button>
+        @click="complete"></action-button>
     </div>
   </div>
 </template>
@@ -13,6 +13,7 @@
 <script>
 import InputCard from './InputCard.vue'
 import ActionButton from './ActionButton.vue'
+import { inputCardModes } from '../../constants.js'
 
 export default {
   name: 'InputCardArea',
@@ -29,8 +30,9 @@ export default {
     'content'
   ],
   mounted() {
+    console.log({ inputCardModes });
     this.$refs.input.focus();
-    if (this.mode === 'modify' && this.content) {
+    if (this.mode === inputCardModes.MODIFY && this.content) {
       this.$refs.input.setValue(this.content);
     }
   },

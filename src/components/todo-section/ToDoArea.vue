@@ -17,7 +17,7 @@
     
     <input-card-area 
       v-if="showInputCard"
-      mode="create"
+      :mode="require('../../constants.js').inputCardModes.CREATE"
       @cancel-input="hideInputCard"
       @complete-input="addTodo"></input-card-area>
   </div>
