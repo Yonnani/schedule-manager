@@ -34,9 +34,7 @@ export default {
   },
   data() {
     return {
-      cardWidth: 375,
-      arrowSize: 50,
-      arrowOffsetWidth: 0
+      arrowSize: 50
     };
   },
   mounted() {
@@ -54,18 +52,13 @@ export default {
   },
   methods: {
     init() {
-      const arrowChildren = Array.from(this.$el.children).filter(child => child.className === 'arrow');
-      if (arrowChildren && arrowChildren[0]) {
-        this.arrowOffsetWidth = arrowChildren[0].offsetWidth;
-      }
-      
       const resizeObserver = new ResizeObserver(entries => {
-        const width = entries[0].contentBoxSize[0].inlineSize - (this.arrowOffsetWidth * 2);
+        const arrowOffsetWidth = this.arrowSize;
+        const width = entries[0].contentBoxSize[0].inlineSize - (arrowOffsetWidth * 2);
         const computedCardNum = this.getCardNum(width);
         if (this.cardNum === null || this.cardNum !== computedCardNum) {
           this.setCardNum(computedCardNum < 1 ? 1 : computedCardNum);
         }
-        console.log('resize observer called');
         this.refreshSchedules(this.getDateKeys);
       });
       resizeObserver.observe(this.$el);
@@ -73,7 +66,8 @@ export default {
       this.refreshSchedules(this.getDateKeys);
     },
     getCardNum(_width) {
-      const maxNum = Math.floor(_width / this.cardWidth);
+      const cardWidth = document.querySelector('.card').offsetWidth;
+      const maxNum = Math.floor(_width / cardWidth);
       return maxNum % 2 === 0 ? maxNum - 1 : maxNum;
     },
     getKeyStringFromDate(date) {
