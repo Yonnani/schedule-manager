@@ -55,6 +55,7 @@ export default {
       border-radius: 0;
       border: 0;
       outline-style: none;
+      width: 100%;
 
       &.red {
         color: $color-font-red;
